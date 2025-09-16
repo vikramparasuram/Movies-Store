@@ -112,3 +112,16 @@ def review_delete(request, pk):
         return redirect("movies:detail", pk=movie_pk)
 
     return render(request, "movies/review_confirm_delete.html", {"review": review})
+
+
+def top_reviews(request):
+    """
+    Show top comments (highest-rated reviews across all movies),
+    newest first on ties.
+    """
+    reviews = (
+        Review.objects
+        .select_related("movie", "user")
+        .order_by("-rating", "-created_at")[:50]
+    )
+    return render(request, "movies/top_reviews.html", {"reviews": reviews})

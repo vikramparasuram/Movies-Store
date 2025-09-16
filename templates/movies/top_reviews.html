@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Top Comments</h2>
+  <p class="text-muted">Highest-rated reviews across all movies.</p>
+  <hr>
+  {% if reviews %}
+    <ul class="list-group">
+      {% for r in reviews %}
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+          <div>
+            <strong>{{ r.user.username }}</strong>
+            <span class="ms-2">rated <b>{{ r.rating }}/5</b></span>
+            <span class="ms-2 text-muted">{{ r.created_at|date:"M j, Y, g:i a" }}</span>
+          </div>
+          <div>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'movies:detail' r.movie.pk %}">
+              {{ r.movie.title }}
+            </a>
+          </div>
+        </div>
+        <p class="mb-0 mt-2">{{ r.content|truncatechars:240 }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
