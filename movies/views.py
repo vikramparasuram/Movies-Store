@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
@@ -125,3 +125,14 @@ def top_reviews(request):
         .order_by("-rating", "-created_at")[:50]
     )
     return render(request, "movies/top_reviews.html", {"reviews": reviews})
+
+@login_required
+def review_report(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    if request.method == "POST":
+        movie_pk = review.movie_id
+        review.delete()  # remove immediately when reported
+        messages.info(request, "Thanks—review was reported and removed.")
+        return redirect("movies:detail", pk=movie_pk)
+    # Optional: if someone hits the URL via GET, just go back
+    return redirect("movies:detail", pk=review.movie_id)
