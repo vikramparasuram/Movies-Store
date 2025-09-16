@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>{{ movie.title }}</h2>
+  <p>{{ movie.description }}</p>
+  <p><b>Price:</b> ${{ movie.price }}</p>
+
+  <a class="btn btn-primary" href="{% url 'cart:add' movie.pk %}">Add to Cart</a>
+
+  <hr>
+  <!-- REVIEWS -->
+  <h4>Reviews</h4>
+  {% if reviews %}
+    <ul class="list-group mb-3">
+      {% for r in reviews %}
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between">
+            <div>
+              <strong>{{ r.user.username }}</strong>
+              <span class="ms-2">Rating: {{ r.rating }}/5</span>
+              <div class="small text-muted">{{ r.created_at|date:"M j, Y, g:i a" }}</div>
+            </div>
+
+            {% if user.is_authenticated and user == r.user %}
+              <div class="ms-3">
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'movies:review_edit' r.pk %}">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'movies:review_delete' r.pk %}">Delete</a>
+              </div>
+            {% endif %}
+          </div>
+          <p class="mb-0 mt-2">{{ r.content }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reviews yet.</p>
+  {% endif %}
+
+  <hr>
+  <h4>Add a review</h4>
+  {% if user.is_authenticated %}
+    <form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="mb-2">{{ form.rating.label_tag }} {{ form.rating }}</div>
+      <div class="mb-2">{{ form.content.label_tag }} {{ form.content }}</div>
+      <button class="btn btn-primary" type="submit">Submit Review</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'accounts:login' %}">Log in</a> to write a review.</p>
+  {% endif %}
+
+  <hr>
+
+  <!-- Optional: mini cart summary (fine to keep) -->
+  <h2>Shopping Cart</h2>
+  {% if items %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Movie</th>
+          <th class="text-center">Qty</th>
+          <th class="text-end">Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in items %}
+        <tr>
+          <td>{{ row.movie.title }}</td>
+          <td class="text-center">{{ row.qty }}</td>
+          <td class="text-end">${{ row.line_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="2" class="text-end">Total</th>
+          <th class="text-end">${{ total }}</th>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="d-flex gap-2">
+      <a class="btn btn-outline-secondary" href="{% url 'cart:clear' %}">Clear Cart</a>
+      <a class="btn btn-success" href="{% url 'cart:checkout' %}">Checkout</a>
+    </div>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+</div>
+{% endblock %}

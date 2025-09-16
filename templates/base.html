@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <head>
+    <title>{{ template_data.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <nav class="p-3 navbar navbar-dark bg-dark navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home:index' %}">
+          <img src="{% static 'img/logo.png' %}" alt="logo" height="40">
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="{% url 'home:about' %}">About</a>
+          <a class="nav-link" href="{% url 'movies:list' %}">Movies</a>
+          <a class="nav-link" href="{% url 'cart:detail' %}">Cart</a>
+
+          {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'movies:orders' %}">My Orders</a>
+            <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button class="nav-link btn btn-link p-0">Logout</button>
+            </form>
+          {% else %}
+            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+            <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-4">
+      {% block content %}{% endblock content %}
+    </div>
+
+    <footer class="text-center text-muted py-4 bg-dark">
+      <small class="text-white">Movies Store • Demo</small>
+    </footer>
+  </body>
+</html>

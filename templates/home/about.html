@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-6 mx-auto mb-3">
+        <h2>About</h2>
+        <hr />
+        <p>
+          
+          
+            My name is Vikram, a third year CS student and I am very excited for this class.
+            I will explain more in the demo video of how this works
+        </p>
+        <p>
+          
+          
+            This store was made through Django, I used a lot of the textbook to set this up.
+          Users that are registered can browse movies, add them to a cart, place orders, 
+          and share reviews with the community.
+        </p>
+    </p>
+    <ul>
+      <li>Register and log in to manage your account</li>
+      <li>Search movies by title</li>
+      <li>Add movies to your cart and place orders</li>
+      <li>Write, edit, and delete reviews</li>
+      <li>Track your order history</li>
+    </ul>
+    <p class="mt-3">This project was developed step-by-step following our class textbook 
+      <i>Django 5 for the Impatient</i>.</p>
+      </div>
+      <div class="col-md-6 mx-auto mb-3 text-center">
+        <img src="{% static 'img/about.jpg' %}" class="max-width-100" alt="about" />
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

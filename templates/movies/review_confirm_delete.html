@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Delete Review</h2>
+  <p>Are you sure you want to delete your review for <strong>{{ review.movie.title }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Yes, delete</button>
+    <a class="btn btn-secondary" href="{% url 'movies:detail' review.movie.pk %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}
